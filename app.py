@@ -7,8 +7,6 @@ import google.generativeai as palm
 # Replace with your actual API key
 palm.configure(api_key="YOUR_PALM_API_KEY")
 
-!pip install flask youtube-transcript-api google-generativeai
-
 app = Flask(__name__)
 
 HTML_TEMPLATE = """
