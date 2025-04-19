@@ -1,9 +1,14 @@
 #testing functionality
-
+import os
 from flask import Flask, render_template_string, request
 from youtube_transcript_api import YouTubeTranscriptApi
 import google.generativeai as palm
 from google.generativeai import GenerativeModel, configure
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
 summary_type = "short"  # Default summary type
 model = GenerativeModel("gemini-2.0-flash-001")
 # Replace with your actual API key
@@ -31,9 +36,9 @@ print(response.text)
 # for m in client.models.list():
 #     model_info = client.models.get(model=m.name)
 #     print(model_info)
-import os
-from dotenv import load_dotenv
+# import os
+# from dotenv import load_dotenv
 
 # Load environment variables from .env file
-load_dotenv()
-print(os.getenv('api_key'))
+# load_dotenv()
+# print(os.getenv('api_key'))
