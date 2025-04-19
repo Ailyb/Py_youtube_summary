@@ -12,8 +12,8 @@ from flask import Flask, send_file, request, jsonify
 
 app = Flask(__name__)
 
-configure(api_key=os.environ['api_key'])
-model = GenerativeModel("gemini-pro")
+configure(api_key=os.environ['API_KEY'])
+model = GenerativeModel("gemini-1.5-flash-latest")
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -68,7 +68,7 @@ def generate_gemini_response(text, mode):
         response = model.generate_content(prompt, stream=True)
         for chunk in response:
              yield "data: "+ str(chunk.text) + "\n\n"
-
+             time.sleep(.1)
 
     except Exception as e:
         return f"Error: An error occurred with Gemini: {e}"

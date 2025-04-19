@@ -9,3 +9,6 @@ youtube-transcript-api
 requests
 beautifulsoup4
 pypdf
+
+# Testing
+google-genai
