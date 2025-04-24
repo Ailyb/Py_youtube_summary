@@ -152,11 +152,4 @@ Open a pull request.
 This project is licensed under the MIT License. See the LICENSE file for details.
 Contact
 
-### Instructions
-1. Copy the entire content above (including the ```markdown and ``` markers).
-2. Create or edit the `README.md` file in your GitHub repository.
-3. Paste the content into the file.
-4. Save and commit the changes. GitHub will render the Markdown with proper formatting.
-
-Let me know if you need further assistance!
 
