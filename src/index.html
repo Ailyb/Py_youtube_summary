@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouSummary</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #09f;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 10px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body >
+    <h1>YouSummary</h1>
+    <div id="loadingSpinner" class="spinner" style="display: none;"></div>
+    <form method="POST" id="main_form" action="/">
+        <label for="url">Enter YouTube URL or Website URL:</label><br>
+        <input type="text" id="url" name="url" size="80"><br><br>
+        <label for="text_input">Enter Text:</label><br>
+        <input type="text" id="text_input" name="text_input" size="80"><br><br>
+
+        <label for="mode">Select Mode:</label>
+        <select id="mode" name="mode">
+            <option value="Summary">Summary</option>
+            <option value="Bullet Points">Bullet Points</option>
+            <option value="Detailed">Detailed</option>
+            <option value="Key Takeaways">Key Takeaways</option>
+        </select><br><br>
+        <label for="file">Upload PDF:</label>
+        <input type="file" id="file" name="file" accept=".pdf"><br><br>
+        <button type="submit">Submit</button>
+    </form>
+    <div id="resultsDiv" style="margin-top: 20px;"></div>
+
+<script>
+    const form = document.getElementById('main_form');
+    const resultsDiv = document.getElementById('resultsDiv');
+    const decoder = new TextDecoder();
+    const loadingSpinner = document.getElementById('loadingSpinner');
+
+    form.addEventListener('submit', event => {
+        event.preventDefault();
+        resultsDiv.innerHTML = ''; // Clear previous results
+        loadingSpinner.style.display = 'block'; // Show spinner
+        const formData = new FormData(form);
+
+        fetch('/process', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            const reader = response.body.getReader();
+
+                    function read() {
+                        reader.read().then(({ done, value }) => {
+                            if (done) {
+                                loadingSpinner.style.display = 'none';// Hide spinner
+                                return;
+                            }
+                            const text = decoder.decode(value, { stream: true });
+                            resultsDiv.innerHTML += marked.parse(text);
+                            read();
+                        });
+                    }
+                    read();
+                });
+        });
+</script>
+
+</body>
+</html>

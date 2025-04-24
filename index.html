@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouSummary</title>
+</head>
+<body >
+    <h1>YouSummary</h1>
+
+    <form method="post" id="main_form">
+        <label for="text_input">Enter Text, YouTube URL, Website URL, or Upload PDF:</label><br>
+        <input type="text" id="text_input" name="text_input" size="80"><br><br>
+
+        <button type="button" name="summary_button" onclick="submitForm('summary')">Summary</button>
+        <button type="button" name="bullet_points_button" onclick="submitForm('bullet_points')">Bullet Points</button>
+        <button type="button" name="detailed_button" onclick="submitForm('detailed')">Detailed</button>
+        <button type="button" name="key_takeaways_button" onclick="submitForm('key_takeaways')">Key Takeaways</button>
+        <div id="gemini_results"></div>
+    </form>
+<script>
+    function submitForm(buttonType){
+        const form = document.getElementById('main_form');
+        const text_input = document.getElementById('text_input').value;
+        const resultsDiv = document.getElementById('gemini_results');
+        resultsDiv.innerHTML = '';
+        
+        fetch('/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `text_input=${text_input}&${buttonType}_button=Submit`,
+        })
+        .then(response => {
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+
+            function read() {
+                reader.read().then(({ done, value }) => {
+                    if (done) {
+                        return;
+                    }
+                    const chunk = decoder.decode(value, { stream: true });
+                    resultsDiv.innerHTML += chunk;
+                    read();
+                });
+            }
+            read();
+        });
+    }
+</script>
+
+</body>
+</html>

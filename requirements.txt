@@ -1,0 +1,14 @@
+# Dev environment
+pip
+autopep8
+
+# App
+flask
+google-generativeai
+youtube-transcript-api
+requests
+beautifulsoup4
+pypdf
+
+# Testing
+google-genai
